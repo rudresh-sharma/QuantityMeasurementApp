@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.apps.quantitymeasurement.Feet;
 
 
-public class QuantityMeasurementAppTest {
+public class FeetEqualityTest {
 
 	
 	@Test

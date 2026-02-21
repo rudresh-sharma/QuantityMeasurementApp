@@ -1,0 +1,21 @@
+package com.apps.quantitymeasurement;
+
+public class QuantityMeasurementApp {
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		Feet f1 = new Feet(5.0);
+		Feet f2 = new Feet(5.0);
+		
+		System.out.println("Equal: " + f1.equals(f2));
+				
+		
+	}
+	
+	
+	
+	
+}

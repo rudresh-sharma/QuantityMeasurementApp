@@ -1,11 +1,12 @@
 package com.apps.quantitymeasurement;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import com.apps.quantitymeasurement.Feet;
 
 
-public class QuantityMeasurementAppTest {
+
+public class FeetEqualityTest{
 
 	
 	@Test

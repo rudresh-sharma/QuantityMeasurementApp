@@ -30,10 +30,10 @@ public class QuantityMeasurementApp {
 	public static Length demonstrateLengthAddition(Length l1, Length l2) {
 
 		Length result = l1.add(l2);
+
 		   System.out.println("Input: add(Quantity(" + l1 + "), "
 		            + "Quantity(" + l2 + "), "
-		            + " → Output: Quantity(" + result + ")");
-
+		            +  " → Output: Quantity(" + result + ")");
 		return result;
 	}
 
@@ -43,30 +43,139 @@ public class QuantityMeasurementApp {
 
 		   System.out.println("Input: add(Quantity(" + l1 + "), "
 		            + "Quantity(" + l2 + "), "
-		            + targetUnit + ") → Output: Quantity(" + result + ")");
+		            +  " → Output: Quantity(" + result + ")");
 		return result;
+	}
+
+	public static boolean demonstrateWeightEquality(Weight w1, Weight w2) {
+
+	    boolean result = w1.equals(w2);
+
+	    System.out.println("Input: Quantity(" + w1 + ").equals(Quantity(" + w2 + ")) → Output: " + result);
+
+	    return result;
+	}
+
+	public static boolean demonstrateWeightComparison(double value1, WeightUnit unit1, double value2,
+			WeightUnit unit2) {
+
+		Weight w1 = new Weight(value1, unit1);
+		Weight w2 = new Weight(value2, unit2);
+
+		boolean result = w1.equals(w2);
+
+		System.out.println("weights are equal : " + result);
+		return result;
+	}
+
+	public static Weight demonstrateWeightConversion(Weight w, WeightUnit targetUnit) {
+
+	    Weight result = w.convertTo(targetUnit);
+
+	    System.out.println("Input: Quantity(" + w + ").convertTo(" + targetUnit + ") → Output: Quantity(" + result + ")");
+
+	    return result;
+	}
+
+	public static Weight demonstrateWeightAddition(Weight w1, Weight w2) {
+
+	    Weight result = w1.add(w2);
+
+	    System.out.println("Input: Quantity(" + w1 + ").add(Quantity(" + w2 + ")) → Output: Quantity(" + result + ")");
+
+	    return result;
+	}
+
+	public static Weight demonstrateWeightAddition(Weight w1, Weight w2, WeightUnit targetUnit) {
+
+	    Weight result = w1.add(w2, targetUnit);
+
+	    System.out.println("Input: Quantity(" + w1 + ").add(Quantity(" + w2 + "), " + targetUnit + ") → Output: Quantity(" + result + ")");
+
+	    return result;
 	}
 
 	public static void main(String[] args) {
 
-		demonstrateLengthComparison(1.0, LengthUnit.FEET, 12.0, LengthUnit.INCHES);
+	    System.out.println("Equality Comparisons:\n");
 
-		demonstrateLengthComparison(1.0, LengthUnit.YARDS, 3.0, LengthUnit.FEET);
+	    demonstrateWeightEquality(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(1.0, WeightUnit.KILOGRAM));
 
-		demonstrateLengthComparison(1.0, LengthUnit.YARDS, 36.0, LengthUnit.INCHES);
+	    demonstrateWeightEquality(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(1000.0, WeightUnit.GRAM));
 
-		demonstrateLengthComparison(1.0, LengthUnit.CENTIMETERS, 0.393701, LengthUnit.INCHES);
+	    demonstrateWeightEquality(
+	            new Weight(2.0, WeightUnit.POUND),
+	            new Weight(2.0, WeightUnit.POUND));
 
-		demonstrateLengthComparison(2.0, LengthUnit.YARDS, 6.0, LengthUnit.FEET);
+	    demonstrateWeightEquality(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(2.20462, WeightUnit.POUND));
 
-		demonstrateLengthConversion(1.0, LengthUnit.FEET, LengthUnit.INCHES);
+	    demonstrateWeightEquality(
+	            new Weight(500.0, WeightUnit.GRAM),
+	            new Weight(0.5, WeightUnit.KILOGRAM));
 
-		demonstrateLengthConversion(3.0, LengthUnit.YARDS, LengthUnit.FEET);
+	    demonstrateWeightEquality(
+	            new Weight(1.0, WeightUnit.POUND),
+	            new Weight(453.592, WeightUnit.GRAM));
 
-		demonstrateLengthConversion(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES);
+	    System.out.println("\nUnit Conversions:\n");
 
-		demonstrateLengthAddition(new Length(1.0, LengthUnit.FEET), new Length(12.0, LengthUnit.INCHES));
-		
-		demonstrateLengthAddition(new Length(1.0, LengthUnit.FEET), new Length(12.0, LengthUnit.INCHES), LengthUnit.YARDS);
+	    demonstrateWeightConversion(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            WeightUnit.GRAM);
+
+	    demonstrateWeightConversion(
+	            new Weight(2.0, WeightUnit.POUND),
+	            WeightUnit.KILOGRAM);
+
+	    demonstrateWeightConversion(
+	            new Weight(500.0, WeightUnit.GRAM),
+	            WeightUnit.POUND);
+
+	    demonstrateWeightConversion(
+	            new Weight(0.0, WeightUnit.KILOGRAM),
+	            WeightUnit.GRAM);
+
+	    System.out.println("\nAddition Operations (Implicit Target Unit):\n");
+
+	    demonstrateWeightAddition(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(2.0, WeightUnit.KILOGRAM));
+
+	    demonstrateWeightAddition(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(1000.0, WeightUnit.GRAM));
+
+	    demonstrateWeightAddition(
+	            new Weight(500.0, WeightUnit.GRAM),
+	            new Weight(0.5, WeightUnit.KILOGRAM));
+
+	    System.out.println("\nAddition Operations (Explicit Target Unit):\n");
+
+	    demonstrateWeightAddition(
+	            new Weight(1.0, WeightUnit.KILOGRAM),
+	            new Weight(1000.0, WeightUnit.GRAM),
+	            WeightUnit.GRAM);
+
+	    demonstrateWeightAddition(
+	            new Weight(1.0, WeightUnit.POUND),
+	            new Weight(453.592, WeightUnit.GRAM),
+	            WeightUnit.POUND);
+
+	    demonstrateWeightAddition(
+	            new Weight(2.0, WeightUnit.KILOGRAM),
+	            new Weight(4.0, WeightUnit.POUND),
+	            WeightUnit.KILOGRAM);
+
+	    System.out.println("\nCategory Incompatibility:\n");
+
+	    System.out.println("Input: Quantity(1.0, KILOGRAM).equals(Quantity(1.0, FOOT)) → Output: "
+	            + new Weight(1.0, WeightUnit.KILOGRAM)
+	                .equals(new Length(1.0, LengthUnit.FEET)));
 	}
 }

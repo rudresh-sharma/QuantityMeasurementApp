@@ -45,53 +45,63 @@ public class QuantityMeasurementApp {
 
 		return result;
 	}
+	
+	public static <U extends IMeasurable> void demonstrateConversion(Quantity<U> quantity,U targetUnit) {
+
+	    Quantity<U> converted = quantity.convertTo(targetUnit);
+
+	    System.out.println("Original: " + quantity);
+	    System.out.println("Converted: " + converted);
+	}
 
 	public static void main(String[] args) {
 
-	    // Demonstration equality between two quantities
-	    Quantity<WeightUnit> weightInGrams =
-	            new Quantity<>(1000.0, WeightUnit.GRAM);
+		demonstrateComparison(1.0, LengthUnit.FEET, 12.0, LengthUnit.INCHES);
 
-	    Quantity<WeightUnit> weightInKilograms =
-	            new Quantity<>(1.0, WeightUnit.KILOGRAM);
+		demonstrateComparison(1.0, LengthUnit.YARDS, 3.0, LengthUnit.FEET);
 
-	    boolean areEqual =
-	            demonstrateEquality(weightInGrams, weightInKilograms);
+		demonstrateComparison(1.0, LengthUnit.YARDS, 36.0, LengthUnit.INCHES);
 
-	    System.out.println("Are weights equal? " + areEqual);
+		demonstrateComparison(1.0, LengthUnit.CENTIMETERS, 0.393701, LengthUnit.INCHES);
 
+		demonstrateComparison(2.0, LengthUnit.YARDS, 6.0, LengthUnit.FEET);
 
-	    // Demonstration conversion
-	    double convertedValue =
-	            demonstrateConversion(1000.0,
-	                                  WeightUnit.GRAM,
-	                                  WeightUnit.KILOGRAM);
+		demonstrateConversion(1.0, LengthUnit.FEET, LengthUnit.INCHES);
 
-	    System.out.println("Converted Weight: "
-	            + convertedValue + " "
-	            + WeightUnit.KILOGRAM.getUnitName());
+		demonstrateConversion(3.0, LengthUnit.YARDS, LengthUnit.FEET);
 
+		demonstrateConversion(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES);
 
-	    // Demonstration addition (result in first unit)
-	    Quantity<WeightUnit> weightInPounds =
-	            new Quantity<>(2.20462, WeightUnit.POUND);
+		demonstrateAddition(new Quantity<>(1.0, LengthUnit.FEET), new Quantity<>(12.0, LengthUnit.INCHES));
 
-	    Quantity<WeightUnit> sumWeight =
-	            demonstrateAddition(weightInKilograms, weightInPounds);
+		demonstrateAddition(new Quantity<>(1.0, LengthUnit.FEET), new Quantity<>(12.0, LengthUnit.INCHES),
+				LengthUnit.YARDS);
 
-	    System.out.println("Sum Weight: "
-	            + sumWeight.getValue() + " "
-	            + sumWeight.getUnit());
+		demonstrateComparison(1.0, WeightUnit.KILOGRAM, 1000.0, WeightUnit.GRAM);
 
+		demonstrateComparison(1.0, WeightUnit.KILOGRAM, 2.20462, WeightUnit.POUND);
 
-	    // Demonstration addition in specific target unit
-	    Quantity<WeightUnit> sumWeightInGrams =
-	            demonstrateAddition(weightInKilograms,
-	                                weightInPounds,
-	                                WeightUnit.GRAM);
+		demonstrateComparison(500.0, WeightUnit.GRAM, 0.5, WeightUnit.KILOGRAM);
 
-	    System.out.println("Sum Weight in Grams: "
-	            + sumWeightInGrams.getValue() + " "
-	            + sumWeightInGrams.getUnit());
+		demonstrateConversion(1.0, WeightUnit.KILOGRAM, WeightUnit.GRAM);
+
+		demonstrateConversion(2.0, WeightUnit.POUND, WeightUnit.KILOGRAM);
+
+		demonstrateConversion(500.0, WeightUnit.GRAM, WeightUnit.POUND);
+
+		demonstrateAddition(new Quantity<>(1.0, WeightUnit.KILOGRAM), new Quantity<>(2.0, WeightUnit.KILOGRAM));
+
+		demonstrateAddition(new Quantity<>(1.0, WeightUnit.KILOGRAM), new Quantity<>(1000.0, WeightUnit.GRAM),
+				WeightUnit.GRAM);
+		
+		Quantity<VolumeUnit> v1 = new Quantity<>(1.0, VolumeUnit.LITRE);
+		Quantity<VolumeUnit> v2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+		Quantity<VolumeUnit> v3 = new Quantity<>(1.0, VolumeUnit.GALLON);
+
+		demonstrateEquality(v1, v2);
+
+		demonstrateConversion(v1, VolumeUnit.MILLILITRE);
+
+		demonstrateAddition(v1, v2, VolumeUnit.LITRE);
 	}
 }

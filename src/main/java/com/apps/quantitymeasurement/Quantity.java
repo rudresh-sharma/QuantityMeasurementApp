@@ -125,46 +125,46 @@ public class Quantity<U extends IMeasurable> {
     
   
 
-        public static void main(String[] args) {
-
-            // Example usage for LengthUnit
-            Quantity<LengthUnit> lengthInFeet = new Quantity<>(10.0, LengthUnit.FEET);
-            Quantity<LengthUnit> lengthInInches = new Quantity<>(120.0, LengthUnit.INCHES);
-
-            boolean isEqual = lengthInFeet.equals(lengthInInches); // true
-            System.out.println("Are lengths equal? " + isEqual);
-
-
-            // Example usage for WeightUnit
-            Quantity<WeightUnit> weightInKilograms = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-            Quantity<WeightUnit> weightInGrams = new Quantity<>(1000.0, WeightUnit.GRAM);
-
-            isEqual = weightInKilograms.equals(weightInGrams); // true
-            System.out.println("Are weights equal? " + isEqual);
-
-
-            // Example Conversion
-            Quantity<LengthUnit> convertedLength = lengthInFeet.convertTo(LengthUnit.INCHES);
-            System.out.println("10 feet in inches: " + convertedLength);
-
-
-            // Example Addition for LengthUnit
-            Quantity<LengthUnit> totalLength =
-                    lengthInFeet.add(lengthInInches, LengthUnit.FEET);
-
-            System.out.println("Total Length in feet: "
-                    + totalLength.getValue() + " " + totalLength.getUnit());
-
-
-            // Example Addition for WeightUnit
-            Quantity<WeightUnit> weightInPounds =
-                    new Quantity<>(2.0, WeightUnit.POUND);
-
-            Quantity<WeightUnit> totalWeight =
-                    weightInKilograms.add(weightInPounds, WeightUnit.KILOGRAM);
-
-            System.out.println("Total Weight in kilograms: "
-                    + totalWeight.getValue() + " " + totalWeight.getUnit());
-        }
-    
+//        public static void main(String[] args) {
+//
+//            // Example usage for LengthUnit
+//            Quantity<LengthUnit> lengthInFeet = new Quantity<>(10.0, LengthUnit.FEET);
+//            Quantity<LengthUnit> lengthInInches = new Quantity<>(120.0, LengthUnit.INCHES);
+//
+//            boolean isEqual = lengthInFeet.equals(lengthInInches); // true
+//            System.out.println("Are lengths equal? " + isEqual);
+//
+//
+//            // Example usage for WeightUnit
+//            Quantity<WeightUnit> weightInKilograms = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+//            Quantity<WeightUnit> weightInGrams = new Quantity<>(1000.0, WeightUnit.GRAM);
+//
+//            isEqual = weightInKilograms.equals(weightInGrams); // true
+//            System.out.println("Are weights equal? " + isEqual);
+//
+//
+//            // Example Conversion
+//            Quantity<LengthUnit> convertedLength = lengthInFeet.convertTo(LengthUnit.INCHES);
+//            System.out.println("10 feet in inches: " + convertedLength);
+//
+//
+//            // Example Addition for LengthUnit
+//            Quantity<LengthUnit> totalLength =
+//                    lengthInFeet.add(lengthInInches, LengthUnit.FEET);
+//
+//            System.out.println("Total Length in feet: "
+//                    + totalLength.getValue() + " " + totalLength.getUnit());
+//
+//
+//            // Example Addition for WeightUnit
+//            Quantity<WeightUnit> weightInPounds =
+//                    new Quantity<>(2.0, WeightUnit.POUND);
+//
+//            Quantity<WeightUnit> totalWeight =
+//                    weightInKilograms.add(weightInPounds, WeightUnit.KILOGRAM);
+//
+//            System.out.println("Total Weight in kilograms: "
+//                    + totalWeight.getValue() + " " + totalWeight.getUnit());
+//        }
+//    
 }

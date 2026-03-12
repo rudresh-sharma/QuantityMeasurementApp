@@ -1,9 +1,16 @@
-package com.apps.quantitymeasurement;
+package com.app.quantitymeasurement;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.app.quantitymeasurement.quantity.Quantity;
+import com.app.quantitymeasurement.unit.IMeasurable;
+import com.app.quantitymeasurement.unit.LengthUnit;
+import com.app.quantitymeasurement.unit.TemperatureUnit;
+import com.app.quantitymeasurement.unit.VolumeUnit;
+import com.app.quantitymeasurement.unit.WeightUnit;
 
 public class QuantityMeasurementAppTest {
 
@@ -1300,7 +1307,7 @@ public class QuantityMeasurementAppTest {
 
 	@Test
 	void testArithmeticOperation_Add_EnumComputation() throws Exception {
-		Class<?> enumClass = Class.forName("com.apps.quantitymeasurement.Quantity$ArithmeticOperation");
+		Class<?> enumClass = Class.forName("com.app.quantitymeasurement.quantity.Quantity$ArithmeticOperation");
 		Object add = Enum.valueOf((Class<Enum>) enumClass, "ADD");
 
 		Method compute = enumClass.getDeclaredMethod("compute", double.class, double.class);
@@ -1312,7 +1319,7 @@ public class QuantityMeasurementAppTest {
 
 	@Test
 	void testArithmeticOperation_Subtract_EnumComputation() throws Exception {
-		Class<?> enumClass = Class.forName("com.apps.quantitymeasurement.Quantity$ArithmeticOperation");
+		Class<?> enumClass = Class.forName("com.app.quantitymeasurement.quantity.Quantity$ArithmeticOperation");
 		Object sub = Enum.valueOf((Class<Enum>) enumClass, "SUBTRACT");
 
 		Method compute = enumClass.getDeclaredMethod("compute", double.class, double.class);
@@ -1324,7 +1331,7 @@ public class QuantityMeasurementAppTest {
 
 	@Test
 	void testArithmeticOperation_Divide_EnumComputation() throws Exception {
-		Class<?> enumClass = Class.forName("com.apps.quantitymeasurement.Quantity$ArithmeticOperation");
+		Class<?> enumClass = Class.forName("com.app.quantitymeasurement.quantity.Quantity$ArithmeticOperation");
 		Object div = Enum.valueOf((Class<Enum>) enumClass, "DIVIDE");
 
 		Method compute = enumClass.getDeclaredMethod("compute", double.class, double.class);
@@ -1440,7 +1447,7 @@ public class QuantityMeasurementAppTest {
 	@Test
 	void testHelper_PrivateVisibility() throws Exception {
 		Method method = Quantity.class.getDeclaredMethod("performBaseArithmetic", Quantity.class,
-				Class.forName("com.apps.quantitymeasurement.Quantity$ArithmeticOperation"));
+				Class.forName("com.app.quantitymeasurement.quantity.Quantity$ArithmeticOperation"));
 		assertTrue(Modifier.isPrivate(method.getModifiers()));
 	}
 

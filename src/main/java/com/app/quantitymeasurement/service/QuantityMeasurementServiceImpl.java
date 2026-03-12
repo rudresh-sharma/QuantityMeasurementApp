@@ -1,14 +1,14 @@
-package com.apps.quantitymeasurement.service;
+package com.app.quantitymeasurement.service;
 
 import java.util.List;
 
-import com.apps.quantitymeasurement.IMeasurable;
-import com.apps.quantitymeasurement.Quantity;
-import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
-import com.apps.quantitymeasurement.model.QuantityDTO;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
-import com.apps.quantitymeasurement.model.QuantityModel;
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.app.quantitymeasurement.exception.QuantityMeasurementException;
+import com.app.quantitymeasurement.model.QuantityDTO;
+import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.model.QuantityModel;
+import com.app.quantitymeasurement.quantity.Quantity;
+import com.app.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.app.quantitymeasurement.unit.IMeasurable;
 
 public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 

@@ -1,12 +1,12 @@
-package com.apps.quantitymeasurement.controller;
+package com.app.quantitymeasurement.controller;
 
 import java.util.List;
 
-import com.apps.quantitymeasurement.IMeasurable;
-import com.apps.quantitymeasurement.Quantity;
-import com.apps.quantitymeasurement.model.QuantityDTO;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
-import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
+import com.app.quantitymeasurement.model.QuantityDTO;
+import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.quantity.Quantity;
+import com.app.quantitymeasurement.service.IQuantityMeasurementService;
+import com.app.quantitymeasurement.unit.IMeasurable;
 
 public class QuantityMeasurementController {
 

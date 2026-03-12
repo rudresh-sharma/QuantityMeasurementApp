@@ -1,4 +1,4 @@
-package com.apps.quantitymeasurement.model;
+package com.app.quantitymeasurement.model;
 
 import java.io.Serializable;
 

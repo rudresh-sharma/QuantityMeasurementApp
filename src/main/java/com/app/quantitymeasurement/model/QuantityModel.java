@@ -1,9 +1,9 @@
-package com.apps.quantitymeasurement.model;
+package com.app.quantitymeasurement.model;
 
 import java.io.Serializable;
 
-import com.apps.quantitymeasurement.IMeasurable;
-import com.apps.quantitymeasurement.Quantity;
+import com.app.quantitymeasurement.quantity.Quantity;
+import com.app.quantitymeasurement.unit.IMeasurable;
 
 public class QuantityModel<U extends IMeasurable> implements Serializable {
 

@@ -14,10 +14,8 @@ public interface IMeasurable {
 		return getClass().getSimpleName().replace("Unit", "").toUpperCase();
 	}
 
-	SupportsArithmetic supportsArithmetic = () -> true;
-
 	default boolean supportsArithmetic() {
-		return supportsArithmetic.isSupported();
+		return true;
 	}
 
 	default void validateOperationSupport(String operation) {

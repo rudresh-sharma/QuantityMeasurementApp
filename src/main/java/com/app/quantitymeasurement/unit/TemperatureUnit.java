@@ -42,11 +42,9 @@ public enum TemperatureUnit implements IMeasurable {
 		}
 	}
 
-	private final SupportsArithmetic supportsArithmetic = () -> false;
-
 	@Override
 	public boolean supportsArithmetic() {
-		return supportsArithmetic.isSupported();
+		return false;
 	}
 
 	@Override

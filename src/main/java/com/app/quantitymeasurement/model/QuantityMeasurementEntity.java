@@ -3,6 +3,13 @@ package com.app.quantitymeasurement.model;
 import java.io.Serializable;
 import java.time.Instant;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class QuantityMeasurementEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -17,9 +24,6 @@ public class QuantityMeasurementEntity implements Serializable {
 	private Double scalarResult;
 	private boolean success;
 	private String errorMessage;
-
-	public QuantityMeasurementEntity() {
-	}
 
 	public QuantityMeasurementEntity(String operation, QuantityModel<?> leftOperand, QuantityModel<?> rightOperand,
 			String targetUnit, QuantityModel<?> quantityResult) {
@@ -51,86 +55,6 @@ public class QuantityMeasurementEntity implements Serializable {
 		this.targetUnit = targetUnit;
 		this.success = false;
 		this.errorMessage = errorMessage;
-	}
-
-	public Instant getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Instant createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-
-	public QuantityModel<?> getLeftOperand() {
-		return leftOperand;
-	}
-
-	public void setLeftOperand(QuantityModel<?> leftOperand) {
-		this.leftOperand = leftOperand;
-	}
-
-	public QuantityModel<?> getRightOperand() {
-		return rightOperand;
-	}
-
-	public void setRightOperand(QuantityModel<?> rightOperand) {
-		this.rightOperand = rightOperand;
-	}
-
-	public String getTargetUnit() {
-		return targetUnit;
-	}
-
-	public void setTargetUnit(String targetUnit) {
-		this.targetUnit = targetUnit;
-	}
-
-	public QuantityModel<?> getQuantityResult() {
-		return quantityResult;
-	}
-
-	public void setQuantityResult(QuantityModel<?> quantityResult) {
-		this.quantityResult = quantityResult;
-	}
-
-	public Double getScalarResult() {
-		return scalarResult;
-	}
-
-	public void setScalarResult(Double scalarResult) {
-		this.scalarResult = scalarResult;
-	}
-
-	public boolean isSuccess() {
-		return success;
-	}
-
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getMeasurementType() {

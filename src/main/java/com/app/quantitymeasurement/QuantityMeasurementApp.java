@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import com.app.quantitymeasurement.controller.QuantityMeasurementController;
+import com.app.quantitymeasurement.exception.DatabaseException;
 import com.app.quantitymeasurement.model.QuantityDTO;
 import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.quantity.Quantity;
@@ -36,8 +37,14 @@ public class QuantityMeasurementApp {
 			LOGGER.info("Using cache repository");
 			return new QuantityMeasurementCacheRepository();
 		}
-		LOGGER.info("Using database repository");
-		return new QuantityMeasurementDatabaseRepository(config);
+		try {
+			LOGGER.info("Using database repository");
+			return new QuantityMeasurementDatabaseRepository(config);
+		} catch (DatabaseException exception) {
+			LOGGER.warning("Database repository unavailable, falling back to cache repository: "
+					+ exception.getMessage());
+			return new QuantityMeasurementCacheRepository();
+		}
 	}
 
 	public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {

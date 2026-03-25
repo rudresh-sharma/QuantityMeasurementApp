@@ -9,39 +9,62 @@ This document walks through the evolution of the Quantity Measurement codebase, 
 ## **Final Architecture**
 
 ```
-📂IMeasurable (interface)
-    ├── getConversionFactor()
-    ├── convertToBaseUnit()
-    ├── convertFromBaseUnit()
-    ├── getUnitName()
-    ├── supportsArithmetic() [default: true]
-    └── validateOperationSupport() [default: no-op]
-        ↑
-        ├──📂 LengthUnit (enum)
-        │   ├── FEET
-        │   ├── INCHES
-        │   ├── YARDS
-        │   └── CENTIMETERS
-        │
-        ├──📂 WeightUnit (enum)
-        │   ├── KILOGRAM
-        │   ├── GRAM
-        │   └── POUND
-        │
-        ├──📂 VolumeUnit (enum)
-        │   ├── LITRE
-        │   ├── MILLILITRE
-        │   └── GALLON
-        │
-        └──📂 TemperatureUnit (enum) [arithmetic disabled]
-            ├── CELSIUS
-            ├── FAHRENHEIT
-            └── KELVIN
+📂 N-Tier Architecture Overview
+├── 📂 controller/
+│   └── QuantityMeasurementController.java
+├── 📂 service/
+│   ├── IQuantityMeasurementService.java
+│   └── QuantityMeasurementServiceImpl.java
+├── 📂 repository/
+│   ├── IQuantityMeasurementRepository.java
+│   ├── QuantityMeasurementCacheRepository.java (Singleton)
+│   └── QuantityMeasurementDatabaseRepository.java
+├── 📂 model/
+│   ├── QuantityModel.java
+│   └── QuantityMeasurementEntity.java
+├── 📂 dto/
+│   └── QuantityDTO.java
+├── 📂 exception/
+│   ├── QuantityMeasurementException.java
+│   └── DatabaseException.java
+└── 📂 util/
+    ├── ApplicationConfig.java
+    └── ConnectionPool.java
 
-📂 SupportsArithmetic (functional interface)
-    └── boolean isSupported()
-
-📂 Quantity<U extends IMeasurable> (generic class)
+📂 Core Domain
+├── 📂 IMeasurable (interface)
+│   ├── getConversionFactor()
+│   ├── convertToBaseUnit()
+│   ├── convertFromBaseUnit()
+│   ├── getUnitName()
+│   ├── supportsArithmetic() [default: true]
+│   └── validateOperationSupport() [default: no-op]
+│       ↑
+│       ├──📂 LengthUnit (enum)
+│       │   ├── FEET
+│       │   ├── INCHES
+│       │   ├── YARDS
+│       │   └── CENTIMETERS
+│       │
+│       ├──📂 WeightUnit (enum)
+│       │   ├── KILOGRAM
+│       │   ├── GRAM
+│       │   └── POUND
+│       │
+│       ├──📂 VolumeUnit (enum)
+│       │   ├── LITRE
+│       │   ├── MILLILITRE
+│       │   └── GALLON
+│       │
+│       └──📂 TemperatureUnit (enum) [arithmetic disabled]
+│           ├── CELSIUS
+│           ├── FAHRENHEIT
+│           └── KELVIN
+│
+├── 📂 SupportsArithmetic (functional interface)
+│   └── boolean isSupported()
+│
+└── 📂 Quantity<U extends IMeasurable> (generic class)
     ├── value: double
     ├── unit: U
     ├── equals()
@@ -54,14 +77,23 @@ This document walks through the evolution of the Quantity Measurement codebase, 
         ├── SUBTRACT
         └── DIVIDE
 
-📂 QuantityMeasurementApp
-    ├── demonstrateEquality<U>()
-    ├── demonstrateComparison<U>()
-    ├── demonstrateConversion<U>()
-    ├── demonstrateAddition<U>()
-    ├── demonstrateSubtraction<U>()
-    ├── demonstrateDivision<U>()
-    └── demonstrateTemperature()
+📂 QuantityMeasurementApp (Singleton + Factory)
+    ├── getInstance()
+    ├── getController()
+    ├── createRepository()
+    ├── createController()
+    ├── createService()
+    └── createQuantityDTO()
+
+📂 Resources
+├── application.properties
+├── logback.xml
+└── db/
+    ├── schema.sql
+    └── schema-postgresql.sql
+
+📂 Test Resources
+└── db/schema-h2.sql
 ```
 
 ---
@@ -673,5 +705,49 @@ public enum DateUnit implements IMeasurable {
     }
 }
 ```
+
+---
+
+## **UC15: N-Tier Architecture Refactoring**
+
+### **What we did:**
+- Refactored into N-tier layers: `controller`, `service`, `repository`, `model`, `dto`, `exception`
+- Added clean interfaces (`IQuantityMeasurementService`, `IQuantityMeasurementRepository`)
+- Kept business logic in service, orchestration in controller, persistence in repository
+- Used DI + factory methods so repository implementation can be swapped
+
+### **Outcome:**
+- Better maintainability and testability
+- Backward compatibility with UC1–UC14 preserved
+- Base foundation for JDBC persistence (UC16)
+
+---
+
+## **UC16: Database Integration with JDBC for Quantity Measurement Persistence**
+
+### **What we did:**
+- Implemented `QuantityMeasurementDatabaseRepository` (JDBC)
+- Added connection pooling (`HikariCP`) and config loader (`ApplicationConfig`)
+- Added SQL schema for H2 and PostgreSQL
+- Added `DatabaseException` and repository query/count/delete methods
+- Added layered tests (repository, service, controller, integration)
+
+### **Storage Modes:**
+- `app.repository.type=database` → saves to PostgreSQL
+- `app.repository.type=cache` → saves to in-memory/file cache
+
+### **Essential files:**
+- `src/main/java/com/quantityMeasurementApp/repository/QuantityMeasurementDatabaseRepository.java`
+- `src/main/java/com/quantityMeasurementApp/util/ApplicationConfig.java`
+- `src/main/java/com/quantityMeasurementApp/util/ConnectionPool.java`
+- `src/main/resources/application.properties`
+- `src/main/resources/db/schema-postgresql.sql`
+- `src/test/resources/db/schema-h2.sql`
+
+### **Outcome:**
+- Persistent operation history with JDBC
+- Safe SQL via prepared statements
+- Transaction support + pool statistics
+- UC1–UC15 behavior retained
 
 ---

@@ -59,6 +59,8 @@ build/
 .DS_Store
 Thumbs.db
 
-# Runtime history artifacts
-quantity-measurement-history.ser
-quantity-measurement-history.ser.corrupted
+### Dump folder ###
+/dump/
+
+### Serialized cache ###
+*.ser

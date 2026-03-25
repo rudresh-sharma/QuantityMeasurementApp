@@ -89,8 +89,7 @@ This document walks through the evolution of the Quantity Measurement codebase, 
 ├── application.properties
 ├── logback.xml
 └── db/
-    ├── schema.sql
-    └── schema-postgresql.sql
+    └── schema.sql
 
 📂 Test Resources
 └── db/schema-h2.sql
@@ -741,7 +740,7 @@ public enum DateUnit implements IMeasurable {
 - `src/main/java/com/quantityMeasurementApp/util/ApplicationConfig.java`
 - `src/main/java/com/quantityMeasurementApp/util/ConnectionPool.java`
 - `src/main/resources/application.properties`
-- `src/main/resources/db/schema-postgresql.sql`
+- `src/main/resources/db/schema.sql`
 - `src/test/resources/db/schema-h2.sql`
 
 ### **Outcome:**

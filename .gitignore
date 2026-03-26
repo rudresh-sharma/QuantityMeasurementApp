@@ -66,4 +66,4 @@ Thumbs.db
 *.ser
 
 ### Local OAuth secrets ###
-/secrets/oauth-secrets.properties
+/secrets/

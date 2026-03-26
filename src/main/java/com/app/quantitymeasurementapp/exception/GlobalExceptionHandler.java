@@ -46,6 +46,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthException(
+            AuthException ex, HttpServletRequest request) {
+
+        Map<String, Object> body = buildErrorBody(
+                HttpStatus.UNAUTHORIZED, "Authentication Error", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGlobalException(
             Exception ex, HttpServletRequest request) {

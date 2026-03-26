@@ -1,6 +1,8 @@
 spring:
   application:
     name: quantity-measurement-app
+  config:
+    import: optional:file:./secrets/oauth-secrets.properties
 
   datasource:
     url: jdbc:mysql://localhost:3306/quantitymeasurementdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
@@ -45,3 +47,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+auth:
+  jwt:
+    secret: 1234567890123456789012345678901234567890123456789012345678901234
+    expiration-minutes: 180
+  oauth2:
+    redirect-uri: ${FRONTEND_GOOGLE_REDIRECT:http://localhost:3000/oauth-success}

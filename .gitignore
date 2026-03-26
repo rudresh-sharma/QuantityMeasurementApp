@@ -64,3 +64,6 @@ Thumbs.db
 
 ### Serialized cache ###
 *.ser
+
+### Local OAuth secrets ###
+/secrets/oauth-secrets.properties

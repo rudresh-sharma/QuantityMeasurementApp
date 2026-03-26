@@ -27,3 +27,18 @@ CREATE TABLE IF NOT EXISTS quantity_measurement_history (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entity_id) REFERENCES quantity_measurement_entity(id)
 );
+
+CREATE TABLE IF NOT EXISTS app_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255),
+    mobile_number VARCHAR(20),
+    role VARCHAR(30) NOT NULL,
+    auth_provider VARCHAR(30) NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_app_user_email ON app_user(email);

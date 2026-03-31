@@ -1,0 +1,45 @@
+spring:
+  config:
+    import: optional:file:./secrets/oauth-secrets.properties
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/quantitymeasurementdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME:root}
+    password: Rudresh@2005
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+logging:
+  level:
+    root: WARN
+    com.app.quantity_measurement_app: INFO
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+
+auth:
+  jwt:
+    secret: ${JWT_SECRET:1234567890123456789012345678901234567890123456789012345678901234}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:180}
+  oauth2:
+    redirect-uri: ${FRONTEND_GOOGLE_REDIRECT:http://localhost:3000/oauth-success}

@@ -26,7 +26,15 @@ public class OAuthSuccessController {
 
     @GetMapping(value = "/oauth-success", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> oauthSuccess(@RequestParam(required = false) String token,
-                                          @RequestParam(required = false) String email) {
+                                          @RequestParam(required = false) String email,
+                                          @RequestParam(required = false) String error) {
+        if (StringUtils.hasText(error)) {
+            return ResponseEntity.status(401).body(Map.of(
+                    "message", error,
+                    "path", "/oauth-success"
+            ));
+        }
+
         if (!StringUtils.hasText(token) || !StringUtils.hasText(email)) {
             return ResponseEntity.badRequest().body(Map.of(
                     "message", "Missing token or email in OAuth success redirect",

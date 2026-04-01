@@ -6,16 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
 
         String message = ex.getBindingResult().getFieldErrors().stream()
@@ -23,54 +20,72 @@ public class GlobalExceptionHandler {
                 .reduce((a, b) -> a + "; " + b)
                 .orElse("Validation failed");
 
-        Map<String, Object> body = buildErrorBody(
+        ErrorResponse body = buildErrorBody(
                 HttpStatus.BAD_REQUEST, "Validation Error", message, request.getRequestURI());
         return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(QuantityMeasurementException.class)
-    public ResponseEntity<Map<String, Object>> handleQuantityException(
+    public ResponseEntity<ErrorResponse> handleQuantityException(
             QuantityMeasurementException ex, HttpServletRequest request) {
 
-        Map<String, Object> body = buildErrorBody(
+        ErrorResponse body = buildErrorBody(
                 HttpStatus.BAD_REQUEST, "Quantity Measurement Error", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex, HttpServletRequest request) {
 
-        Map<String, Object> body = buildErrorBody(
+        ErrorResponse body = buildErrorBody(
                 HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<Map<String, Object>> handleAuthException(
+    public ResponseEntity<ErrorResponse> handleAuthException(
             AuthException ex, HttpServletRequest request) {
 
-        Map<String, Object> body = buildErrorBody(
+        ErrorResponse body = buildErrorBody(
                 HttpStatus.UNAUTHORIZED, "Authentication Error", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
     }
 
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateEmailException(
+            DuplicateEmailException ex, HttpServletRequest request) {
+
+        ErrorResponse body = buildErrorBody(
+                HttpStatus.CONFLICT, "Conflict", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(
+            NoResourceFoundException ex, HttpServletRequest request) {
+
+        ErrorResponse body = buildErrorBody(
+                HttpStatus.NOT_FOUND, "Not Found", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGlobalException(
+    public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex, HttpServletRequest request) {
 
-        Map<String, Object> body = buildErrorBody(
+        ErrorResponse body = buildErrorBody(
                 HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
-    private Map<String, Object> buildErrorBody(HttpStatus status, String error, String message, String path) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now().toString());
-        body.put("status", status.value());
-        body.put("error", error);
-        body.put("message", message);
-        body.put("path", path);
-        return body;
+    private ErrorResponse buildErrorBody(HttpStatus status, String error, String message, String path) {
+        return new ErrorResponse(
+                java.time.LocalDateTime.now(),
+                status.value(),
+                error,
+                message,
+                path
+        );
     }
 }

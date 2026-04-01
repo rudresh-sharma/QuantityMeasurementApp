@@ -4,7 +4,10 @@ public enum WeightUnit implements IMeasurable {
 
     KILOGRAM(1.0),
     GRAM(0.001),
-    POUND(0.453592);
+    MILLIGRAM(0.000001),
+    POUND(0.453592),
+    OUNCE(0.0283495),
+    TONNE(1000.0);
 
     private final double conversionFactor;
 
@@ -19,14 +22,12 @@ public enum WeightUnit implements IMeasurable {
 
     @Override
     public double convertToBaseUnit(double value) {
-        double result = value * conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return value * conversionFactor;
     }
 
     @Override
     public double convertFromBaseUnit(double baseValue) {
-        double result = baseValue / conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return baseValue / conversionFactor;
     }
 
     @Override

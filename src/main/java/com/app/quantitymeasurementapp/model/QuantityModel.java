@@ -28,7 +28,7 @@ public class QuantityModel<U extends IMeasurable> {
     }
 
     public static void main(String[] args) {
-        QuantityModel<LengthUnit> lengthModel = new QuantityModel<>(12.0, LengthUnit.FEET);
+        QuantityModel<LengthUnit> lengthModel = new QuantityModel<>(12.0, LengthUnit.FOOT);
         System.out.println("QuantityModel created: " + lengthModel);
 
         QuantityModel<WeightUnit> weightModel = new QuantityModel<>(1.5, WeightUnit.KILOGRAM);

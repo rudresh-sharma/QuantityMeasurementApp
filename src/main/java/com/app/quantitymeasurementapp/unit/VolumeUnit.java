@@ -1,7 +1,14 @@
 package com.app.quantitymeasurementapp.unit;
 
 public enum VolumeUnit implements IMeasurable {
-    LITRE(1.0), MILLILITRE(0.001), GALLON(3.78541);
+    LITRE(1.0),
+    MILLILITRE(0.001),
+    GALLON(3.78541),
+    QUART(0.946353),
+    PINT(0.473176),
+    CUP(0.236588),
+    FLUID_OUNCE(0.0295735),
+    CUBIC_METER(1000.0);
 
     private final double conversionFactor;
 
@@ -16,14 +23,12 @@ public enum VolumeUnit implements IMeasurable {
 
     @Override
     public double convertToBaseUnit(double value) {
-        double result = value * conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return value * conversionFactor;
     }
 
     @Override
     public double convertFromBaseUnit(double value) {
-        double result = value / conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return value / conversionFactor;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class QuantityDTO {
     }
 
     public enum LengthUnit implements IMeasurableUnit {
-        FEET, INCHES, YARDS, CENTIMETERS;
+        KILOMETER, METER, CENTIMETER, MILLIMETER, MILE, YARD, FOOT, INCH;
 
         @Override
         public String getUnitName() {
@@ -32,7 +32,7 @@ public class QuantityDTO {
     }
 
     public enum VolumeUnit implements IMeasurableUnit {
-        LITRE, MILLILITRE, GALLON;
+        LITRE, MILLILITRE, GALLON, QUART, PINT, CUP, FLUID_OUNCE, CUBIC_METER;
 
         @Override
         public String getUnitName() {
@@ -46,7 +46,7 @@ public class QuantityDTO {
     }
 
     public enum WeightUnit implements IMeasurableUnit {
-        KILOGRAM, GRAM, POUND;
+        KILOGRAM, GRAM, MILLIGRAM, POUND, OUNCE, TONNE;
 
         @Override
         public String getUnitName() {

@@ -2,10 +2,14 @@ package com.app.quantitymeasurementapp.unit;
 
 public enum LengthUnit implements IMeasurable {
 
-    FEET(12.0),
-    INCHES(1.0),
-    YARDS(36.0),
-    CENTIMETERS(0.393701);
+    KILOMETER(39370.1),
+    METER(39.3701),
+    CENTIMETER(0.393701),
+    MILLIMETER(0.0393701),
+    MILE(63360.0),
+    YARD(36.0),
+    FOOT(12.0),
+    INCH(1.0);
 
     private final double conversionFactor;
 
@@ -20,14 +24,12 @@ public enum LengthUnit implements IMeasurable {
 
     @Override
     public double convertToBaseUnit(double value) {
-        double result = value * conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return value * conversionFactor;
     }
 
     @Override
     public double convertFromBaseUnit(double baseValue) {
-        double result = baseValue / conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return baseValue / conversionFactor;
     }
 
     @Override

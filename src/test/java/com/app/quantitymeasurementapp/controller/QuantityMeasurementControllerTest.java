@@ -44,16 +44,16 @@ class QuantityMeasurementControllerTest {
 
     @Test
     void testCompareQuantities() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         QuantityMeasurementDTO result = new QuantityMeasurementDTO();
         result.setThisValue(1.0);
-        result.setThisUnit("FEET");
+        result.setThisUnit("FOOT");
         result.setThisMeasurementType("LengthUnit");
         result.setThatValue(12.0);
-        result.setThatUnit("INCHES");
+        result.setThatUnit("INCH");
         result.setThatMeasurementType("LengthUnit");
         result.setOperation("compare");
         result.setResultString("true");
@@ -74,20 +74,20 @@ class QuantityMeasurementControllerTest {
 
     @Test
     void testAddQuantities() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         QuantityMeasurementDTO result = new QuantityMeasurementDTO();
         result.setThisValue(1.0);
-        result.setThisUnit("FEET");
+        result.setThisUnit("FOOT");
         result.setThisMeasurementType("LengthUnit");
         result.setThatValue(12.0);
-        result.setThatUnit("INCHES");
+        result.setThatUnit("INCH");
         result.setThatMeasurementType("LengthUnit");
         result.setOperation("add");
         result.setResultValue(2.0);
-        result.setResultUnit("FEET");
+        result.setResultUnit("FOOT");
         result.setResultMeasurementType("LengthUnit");
         result.setError(false);
 
@@ -99,34 +99,38 @@ class QuantityMeasurementControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.operation").value("add"))
                 .andExpect(jsonPath("$.resultValue").value(2.0))
-                .andExpect(jsonPath("$.resultUnit").value("FEET"));
+                .andExpect(jsonPath("$.resultUnit").value("FOOT"));
     }
 
     @Test
     void testConvertQuantity() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(0.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(0.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         QuantityMeasurementDTO result = new QuantityMeasurementDTO();
         result.setThisValue(1.0);
-        result.setThisUnit("FEET");
+        result.setThisUnit("FOOT");
         result.setThisMeasurementType("LengthUnit");
         result.setThatValue(0.0);
-        result.setThatUnit("INCHES");
+        result.setThatUnit("INCH");
         result.setThatMeasurementType("LengthUnit");
         result.setOperation("convert");
         result.setResultValue(12.0);
+        result.setResultUnit("INCH");
+        result.setResultMeasurementType("LengthUnit");
         result.setError(false);
 
         Mockito.when(service.convertQuantity(Mockito.any(), Mockito.any())).thenReturn(result);
 
         mockMvc.perform(post("/api/v1/quantities/convert")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(input)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.operation").value("convert"))
-                .andExpect(jsonPath("$.resultValue").value(12.0));
+                .andExpect(jsonPath("$.resultValue").value(12.0))
+                .andExpect(jsonPath("$.resultUnit").value("INCH"))
+                .andExpect(jsonPath("$.resultMeasurementType").value("LengthUnit"));
     }
 
     @Test

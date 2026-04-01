@@ -5,6 +5,7 @@ import com.app.quantitymeasurementapp.dto.auth.LoginRequest;
 import com.app.quantitymeasurementapp.dto.auth.RegisterRequest;
 import com.app.quantitymeasurementapp.dto.auth.UserProfileResponse;
 import com.app.quantitymeasurementapp.exception.AuthException;
+import com.app.quantitymeasurementapp.exception.DuplicateEmailException;
 import com.app.quantitymeasurementapp.model.AuthProvider;
 import com.app.quantitymeasurementapp.model.UserEntity;
 import com.app.quantitymeasurementapp.model.UserRole;
@@ -37,7 +38,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         String email = request.getEmail().trim().toLowerCase();
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new AuthException("User already exists with email: " + email);
+            throw new DuplicateEmailException("Email already exists. Please login with your existing account.");
         }
 
         UserEntity user = new UserEntity();
@@ -55,19 +56,19 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         String email = request.getEmail().trim().toLowerCase();
+        UserEntity user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new AuthException("Invalid email or password"));
+
+        if (user.getAuthProvider() == AuthProvider.GOOGLE) {
+            throw new AuthException("This account uses Google sign-in. Please continue with Google.");
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, request.getPassword())
             );
         } catch (BadCredentialsException ex) {
             throw new AuthException("Invalid email or password");
-        }
-
-        UserEntity user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new AuthException("User not found"));
-
-        if (user.getAuthProvider() == AuthProvider.GOOGLE) {
-            throw new AuthException("This account uses Google sign-in");
         }
 
         return buildAuthResponse(user);

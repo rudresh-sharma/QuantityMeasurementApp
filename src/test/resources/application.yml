@@ -31,3 +31,7 @@ auth:
     expiration-minutes: 180
   oauth2:
     redirect-uri: http://localhost:3000/oauth-success
+
+app:
+  cors:
+    allowed-origin: http://localhost:4200

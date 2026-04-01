@@ -1,5 +1,6 @@
 package com.app.quantitymeasurementapp.security;
 
+import com.app.quantitymeasurementapp.exception.AuthException;
 import com.app.quantitymeasurementapp.model.UserEntity;
 import com.app.quantitymeasurementapp.service.AuthService;
 import jakarta.servlet.ServletException;
@@ -41,15 +42,23 @@ public class GoogleOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             return;
         }
 
-        UserEntity user = authService.processGoogleUser(name, email);
-        String token = jwtService.generateToken(user);
+        try {
+            UserEntity user = authService.processGoogleUser(name, email);
+            String token = jwtService.generateToken(user);
 
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam("token", token)
-                .queryParam("email", user.getEmail())
-                .build()
-                .toUriString();
+            String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
+                    .queryParam("token", token)
+                    .queryParam("email", user.getEmail())
+                    .build()
+                    .toUriString();
 
-        response.sendRedirect(targetUrl);
+            response.sendRedirect(targetUrl);
+        } catch (AuthException ex) {
+            String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
+                    .queryParam("error", ex.getMessage())
+                    .build()
+                    .toUriString();
+            response.sendRedirect(targetUrl);
+        }
     }
 }

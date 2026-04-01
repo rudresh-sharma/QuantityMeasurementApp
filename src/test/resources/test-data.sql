@@ -4,4 +4,4 @@ INSERT INTO quantity_measurement_entity (
     operation, result_value, result_unit, result_measurement_type,
     result_string, is_error, error_message
 ) VALUES
-(1.0, 'FEET', 'LengthUnit', 12.0, 'INCHES', 'LengthUnit', 'COMPARE', NULL, NULL, NULL, 'Equal', FALSE, NULL);
+(1.0, 'FOOT', 'LengthUnit', 12.0, 'INCH', 'LengthUnit', 'COMPARE', NULL, NULL, NULL, 'Equal', FALSE, NULL);

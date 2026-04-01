@@ -39,7 +39,7 @@ class QuantityMeasurementAppApplicationTests {
     @Test
     void testCompareEqualQuantities() throws Exception {
         QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/compare")
@@ -53,8 +53,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testConvertQuantity() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(0.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(0.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/convert")
@@ -67,8 +67,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testAddQuantities() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/add")
@@ -77,14 +77,14 @@ class QuantityMeasurementAppApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.operation").value("add"))
                 .andExpect(jsonPath("$.resultValue").value(2.0))
-                .andExpect(jsonPath("$.resultUnit").value("FEET"))
+                .andExpect(jsonPath("$.resultUnit").value("FOOT"))
                 .andExpect(jsonPath("$.resultMeasurementType").value("LengthUnit"));
     }
 
     @Test
     void testSubtractQuantities() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(5.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(2.0, "FEET", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(5.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(2.0, "FOOT", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/subtract")
@@ -97,8 +97,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testDivideQuantities() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(6.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(2.0, "FEET", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(6.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(2.0, "FOOT", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/divide")
@@ -149,7 +149,7 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testErrorHandlingIncompatibleTypes() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
         QuantityDTO q2 = new QuantityDTO(1.0, "KILOGRAM", "WeightUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
@@ -173,7 +173,7 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testGetErrorHistory() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
         QuantityDTO q2 = new QuantityDTO(1.0, "KILOGRAM", "WeightUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
@@ -228,8 +228,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testDivisionByZeroReturns500() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(0.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(0.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/divide")
@@ -253,8 +253,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testContentNegotiationJson() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/compare")
@@ -267,8 +267,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testJpaRepositoryPersistence() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(1.0, "FOOT", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(12.0, "INCH", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/compare")
@@ -284,8 +284,8 @@ class QuantityMeasurementAppApplicationTests {
 
     @Test
     void testMultipleOperationsHistory() throws Exception {
-        QuantityDTO q1 = new QuantityDTO(2.0, "YARDS", "LengthUnit");
-        QuantityDTO q2 = new QuantityDTO(6.0, "FEET", "LengthUnit");
+        QuantityDTO q1 = new QuantityDTO(2.0, "YARD", "LengthUnit");
+        QuantityDTO q2 = new QuantityDTO(6.0, "FOOT", "LengthUnit");
         QuantityInputDTO input = new QuantityInputDTO(q1, q2);
 
         mockMvc.perform(post("/api/v1/quantities/compare")

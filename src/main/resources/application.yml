@@ -53,4 +53,9 @@ auth:
     secret: 1234567890123456789012345678901234567890123456789012345678901234
     expiration-minutes: 180
   oauth2:
-    redirect-uri: ${FRONTEND_GOOGLE_REDIRECT:http://localhost:3000/oauth-success}
+    redirect-uri: ${FRONTEND_GOOGLE_REDIRECT:http://localhost:4200/oauth-success}
+
+app:
+  cors:
+    allowed-origin: ${FRONTEND_ORIGIN:http://localhost:4200}
+

@@ -77,12 +77,12 @@ class AuthControllerTest {
                                 {
                                   "thisQuantityDTO": {
                                     "value": 1.0,
-                                    "unit": "FEET",
+                                    "unit": "FOOT",
                                     "measurementType": "LengthUnit"
                                   },
                                   "thatQuantityDTO": {
                                     "value": 12.0,
-                                    "unit": "INCHES",
+                                    "unit": "INCH",
                                     "measurementType": "LengthUnit"
                                   }
                                 }
@@ -96,18 +96,42 @@ class AuthControllerTest {
                                 {
                                   "thisQuantityDTO": {
                                     "value": 1.0,
-                                    "unit": "FEET",
+                                    "unit": "FOOT",
                                     "measurementType": "LengthUnit"
                                   },
                                   "thatQuantityDTO": {
                                     "value": 12.0,
-                                    "unit": "INCHES",
+                                    "unit": "INCH",
                                     "measurementType": "LengthUnit"
                                   }
                                 }
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(2.0));
+    }
+
+    @Test
+    void registerReturnsConflictWhenEmailAlreadyExists() throws Exception {
+        String registerBody = """
+                {
+                  "fullName": "Rudresh Sharma",
+                  "email": "rudresh@example.com",
+                  "password": "Password@123",
+                  "mobileNumber": "9876543210"
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registerBody))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registerBody))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error").value("Conflict"))
+                .andExpect(jsonPath("$.message").value("Email already exists. Please login with your existing account."));
     }
 
     @Test
@@ -148,6 +172,16 @@ class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").value("Missing token or email in OAuth success redirect"))
+                .andExpect(jsonPath("$.path").value("/oauth-success"));
+    }
+
+    @Test
+    void oauthSuccessReturnsJsonErrorWhenOauthFlowFails() throws Exception {
+        mockMvc.perform(get("/oauth-success")
+                        .param("error", "No account is registered with this Google email. Please sign up first to continue."))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("No account is registered with this Google email. Please sign up first to continue."))
                 .andExpect(jsonPath("$.path").value("/oauth-success"));
     }
 

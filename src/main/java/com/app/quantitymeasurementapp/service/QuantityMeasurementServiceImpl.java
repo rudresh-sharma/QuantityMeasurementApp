@@ -59,6 +59,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
                 throw new IllegalArgumentException("Source quantity cannot be null");
             }
 
+            if (quantity2 == null) {
+                throw new IllegalArgumentException("Target quantity cannot be null");
+            }
+
             IMeasurable sourceUnit = IMeasurable.getUnitByName(quantity1.getUnit(), quantity1.getMeasurementType());
             IMeasurable targetUnit = IMeasurable.getUnitByName(quantity2.getUnit(), quantity2.getMeasurementType());
 
@@ -66,6 +70,8 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             populateEntity(entity, quantity1, quantity2, "convert");
             entity.setResultValue(convertedValue);
+            entity.setResultUnit(targetUnit.getUnitName());
+            entity.setResultMeasurementType(targetUnit.getMeasurementType());
             entity.setError(false);
             repository.save(entity);
             logger.debug("CONVERT persisted");

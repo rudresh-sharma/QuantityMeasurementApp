@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: authentication-service-auth
+              uri: lb://authentication-service
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: authentication-service-oauth
+              uri: lb://authentication-service
+              predicates:
+                - Path=/oauth2/**
+            - id: authentication-service-login-oauth
+              uri: lb://authentication-service
+              predicates:
+                - Path=/login/oauth2/**
+            - id: authentication-service-success
+              uri: lb://authentication-service
+              predicates:
+                - Path=/oauth-success
+            - id: quantity-measurement-service
+              uri: lb://quantity-measurement-service
+              predicates:
+                - Path=/api/v1/quantities/**
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/users/**
+
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

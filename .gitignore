@@ -13,6 +13,7 @@
 .mvn/wrapper/maven-wrapper.jar
 mvnw
 mvnw.cmd
+.m2-repo/
 .log
 /logs/
 *.log
@@ -67,4 +68,6 @@ Thumbs.db
 *.ser
 
 ### Local OAuth secrets ###
-/secrets/
+**/secrets/
+**/secrets/*.properties
+!**/secrets/*.example.properties

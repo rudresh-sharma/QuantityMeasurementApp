@@ -12,11 +12,15 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @Component
 public class GoogleOAuth2SuccessHandler implements AuthenticationSuccessHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleOAuth2SuccessHandler.class);
 
     private final AuthService authService;
     private final JwtService jwtService;
@@ -56,6 +60,13 @@ public class GoogleOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         } catch (AuthException ex) {
             String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
                     .queryParam("error", ex.getMessage())
+                    .build()
+                    .toUriString();
+            response.sendRedirect(targetUrl);
+        } catch (Exception ex) {
+            log.error("Google OAuth sign-in failed while processing authenticated user", ex);
+            String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
+                    .queryParam("error", "Google sign-in could not be completed right now. Please verify backend services are running.")
                     .build()
                     .toUriString();
             response.sendRedirect(targetUrl);

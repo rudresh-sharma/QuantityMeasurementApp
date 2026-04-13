@@ -1,6 +1,7 @@
 package com.app.authenticationservice.config;
 
 import com.app.authenticationservice.security.AppUserDetailsService;
+import com.app.authenticationservice.security.GoogleOAuth2FailureHandler;
 import com.app.authenticationservice.security.GoogleOAuth2SuccessHandler;
 import com.app.authenticationservice.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.ObjectProvider;
@@ -54,6 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider,
                                                    ObjectProvider<GoogleOAuth2SuccessHandler> googleHandlerProvider,
+                                                   ObjectProvider<GoogleOAuth2FailureHandler> googleFailureHandlerProvider,
                                                    AuthenticationProvider authenticationProvider) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -78,13 +80,15 @@ public class SecurityConfig {
         if (googleOauthEnabled) {
             ClientRegistrationRepository clientRegistrationRepository = clientRegistrationRepositoryProvider.getIfAvailable();
             GoogleOAuth2SuccessHandler handler = googleHandlerProvider.getIfAvailable();
-            if (handler != null && clientRegistrationRepository != null) {
+            GoogleOAuth2FailureHandler failureHandler = googleFailureHandlerProvider.getIfAvailable();
+            if (handler != null && failureHandler != null && clientRegistrationRepository != null) {
                 http.oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint ->
                                 endpoint.authorizationRequestResolver(
                                         googleAuthorizationRequestResolver(clientRegistrationRepository)
                                 ))
-                        .successHandler(handler));
+                        .successHandler(handler)
+                        .failureHandler(failureHandler));
             }
         }
 

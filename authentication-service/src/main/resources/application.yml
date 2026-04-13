@@ -3,6 +3,12 @@ spring:
     name: authentication-service
   config:
     import: optional:file:./secrets/oauth-secrets.properties
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: ${GOOGLE_OAUTH_CALLBACK_URI:http://localhost:8081/login/oauth2/code/google}
 
 server:
   port: 8081

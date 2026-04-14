@@ -32,3 +32,45 @@ This branch is the starting point for migrating the existing monolith into five 
 - Move `controller/AuthController` and auth-related classes into `authentication-service`.
 - Move `controller/QuantityMeasurementController` and measurement logic into `quantity-measurement-service`.
 - Keep JWT verification in downstream services and centralize login flows in `authentication-service`.
+
+## Docker
+
+Build the Spring Boot jars locally first:
+
+```bash
+mvn clean package -DskipTests
+```
+
+Then build and start the full stack with:
+
+```bash
+docker compose up --build
+```
+
+For Google OAuth in Docker, create `authentication-service/secrets/oauth-secrets.properties`
+from the example file and put your real Google client ID and secret there before starting
+the stack.
+
+Published ports:
+
+- `8080`: API gateway
+- `8081`: authentication-service
+- `8082`: quantity-measurement-service
+- `8083`: user-service
+- `8761`: Eureka dashboard
+- `9090`: Spring Boot Admin
+- `3306`: MySQL
+
+The compose stack injects container-friendly `EUREKA_CLIENT_SERVICEURL_DEFAULTZONE`,
+`USER_SERVICE_BASE_URL`, and datasource settings so the services can discover each other
+inside Docker.
+
+## Jenkins
+
+This repository now includes a root [Jenkinsfile](./Jenkinsfile) for CI.
+
+- It builds the full Maven multi-module project from the repository root.
+- It archives generated Spring Boot jars from each service.
+- It can also build Docker images for all services through the `BUILD_DOCKER_IMAGES` parameter.
+
+Jenkins setup notes are in [JENKINS.md](./JENKINS.md).

@@ -1,0 +1,119 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: quantity-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Rudresh@2005
+      MYSQL_DATABASE: userdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pRudresh@2005"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Rudresh@2005
+    ports:
+      - "8083:8083"
+
+  quantity-measurement-service:
+    build:
+      context: .
+      dockerfile: quantity-measurement-service/Dockerfile
+    container_name: quantity-measurement-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      AUTH_JWT_SECRET: "1234567890123456789012345678901234567890123456789012345678901234"
+      FRONTEND_ORIGIN: http://localhost:4200
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/quantitymeasurementdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Rudresh@2005
+    ports:
+      - "8082:8082"
+
+  authentication-service:
+    build:
+      context: .
+      dockerfile: authentication-service/Dockerfile
+    container_name: authentication-service
+    depends_on:
+      eureka-server:
+        condition: service_started
+      user-service:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      AUTH_JWT_SECRET: "1234567890123456789012345678901234567890123456789012345678901234"
+      USER_SERVICE_BASE_URL: http://user-service:8083
+      FRONTEND_GOOGLE_REDIRECT: http://localhost:4200/oauth-success
+      FRONTEND_ORIGIN: http://localhost:4200
+      GOOGLE_OAUTH_CALLBACK_URI: http://localhost:8081/login/oauth2/code/google
+
+    volumes:
+      - ./authentication-service/secrets:/app/secrets:ro
+    ports:
+      - "8081:8081"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    depends_on:
+      eureka-server:
+        condition: service_started
+      authentication-service:
+        condition: service_started
+      quantity-measurement-service:
+        condition: service_started
+      user-service:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+
+  admin-server:
+    build:
+      context: .
+      dockerfile: admin-server/Dockerfile
+    container_name: admin-server
+    depends_on:
+      eureka-server:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "9090:9090"
+
+volumes:
+  mysql-data:

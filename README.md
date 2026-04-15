@@ -49,7 +49,8 @@ docker compose up --build
 
 For Google OAuth in Docker, create `authentication-service/secrets/oauth-secrets.properties`
 from the example file and put your real Google client ID and secret there before starting
-the stack.
+the stack. You can also skip the file and provide `GOOGLE_CLIENT_ID` and
+`GOOGLE_CLIENT_SECRET` through environment variables instead.
 
 Published ports:
 
@@ -64,6 +65,16 @@ Published ports:
 The compose stack injects container-friendly `EUREKA_CLIENT_SERVICEURL_DEFAULTZONE`,
 `USER_SERVICE_BASE_URL`, and datasource settings so the services can discover each other
 inside Docker.
+
+Copy `.env.example` to `.env` before a real deployment and fill in your own values.
+For the current Vercel + AWS setup, use:
+
+- `FRONTEND_ORIGIN=https://quantitymeasurement.vercel.app`
+- `FRONTEND_GOOGLE_REDIRECT=https://quantitymeasurement.vercel.app/oauth-success`
+- `GOOGLE_OAUTH_CALLBACK_URI=http://15.207.1.116:8080/login/oauth2/code/google`
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from Google Cloud
+- `AUTH_JWT_SECRET` with a long random value
+- `SPRING_DATASOURCE_PASSWORD` / `MYSQL_ROOT_PASSWORD` with your own database password
 
 ## Jenkins
 

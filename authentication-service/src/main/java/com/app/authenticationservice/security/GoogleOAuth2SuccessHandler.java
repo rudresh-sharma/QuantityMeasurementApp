@@ -28,7 +28,7 @@ public class GoogleOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
     public GoogleOAuth2SuccessHandler(AuthService authService,
                                       JwtService jwtService,
-                                      @Value("${auth.oauth2.redirect-uri:http://localhost:3000/oauth-success}") String redirectUri) {
+                                      @Value("${auth.oauth2.redirect-uri:http://localhost:4200/oauth-success}") String redirectUri) {
         this.authService = authService;
         this.jwtService = jwtService;
         this.redirectUri = redirectUri;

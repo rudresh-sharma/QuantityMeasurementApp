@@ -21,7 +21,7 @@ public class GoogleOAuth2FailureHandler implements AuthenticationFailureHandler 
     private final String redirectUri;
 
     public GoogleOAuth2FailureHandler(
-            @Value("${auth.oauth2.redirect-uri:http://localhost:3000/oauth-success}") String redirectUri) {
+            @Value("${auth.oauth2.redirect-uri:http://localhost:4200/oauth-success}") String redirectUri) {
         this.redirectUri = redirectUri;
     }
 

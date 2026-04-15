@@ -29,6 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,15 +40,18 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final boolean googleOauthEnabled;
-    private final String frontendOrigin;
+    private final List<String> frontendOrigins;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
                           AppUserDetailsService userDetailsService,
-                          @Value("${app.cors.allowed-origin:http://localhost:4200}") String frontendOrigin,
+                          @Value("${app.cors.allowed-origin:http://localhost:4200}") String frontendOrigins,
                           @Value("${spring.security.oauth2.client.registration.google.client-id:}") String googleClientId,
                           @Value("${spring.security.oauth2.client.registration.google.client-secret:}") String googleClientSecret) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.frontendOrigin = frontendOrigin;
+        this.frontendOrigins = Arrays.stream(frontendOrigins.split(","))
+                .map(String::trim)
+                .filter(StringUtils::hasText)
+                .toList();
         this.googleOauthEnabled = StringUtils.hasText(googleClientId) && StringUtils.hasText(googleClientSecret);
     }
 
@@ -98,7 +102,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendOrigin));
+        configuration.setAllowedOrigins(frontendOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

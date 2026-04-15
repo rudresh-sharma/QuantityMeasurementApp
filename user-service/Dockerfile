@@ -5,7 +5,7 @@ COPY pom.xml pom.xml
 COPY user-service/pom.xml user-service/pom.xml
 COPY user-service/src user-service/src
 
-RUN mvn -pl user-service -am clean package -DskipTests
+RUN mvn -f user-service/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app

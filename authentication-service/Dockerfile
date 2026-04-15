@@ -5,7 +5,7 @@ COPY pom.xml pom.xml
 COPY authentication-service/pom.xml authentication-service/pom.xml
 COPY authentication-service/src authentication-service/src
 
-RUN mvn -pl authentication-service -am clean package -DskipTests
+RUN mvn -f authentication-service/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app

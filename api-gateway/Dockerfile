@@ -5,7 +5,7 @@ COPY pom.xml pom.xml
 COPY api-gateway/pom.xml api-gateway/pom.xml
 COPY api-gateway/src api-gateway/src
 
-RUN mvn -pl api-gateway -am clean package -DskipTests
+RUN mvn -f api-gateway/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app

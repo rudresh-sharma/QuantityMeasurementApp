@@ -5,7 +5,7 @@ COPY pom.xml pom.xml
 COPY quantity-measurement-service/pom.xml quantity-measurement-service/pom.xml
 COPY quantity-measurement-service/src quantity-measurement-service/src
 
-RUN mvn -pl quantity-measurement-service -am clean package -DskipTests
+RUN mvn -f quantity-measurement-service/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app

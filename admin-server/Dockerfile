@@ -5,7 +5,7 @@ COPY pom.xml pom.xml
 COPY admin-server/pom.xml admin-server/pom.xml
 COPY admin-server/src admin-server/src
 
-RUN mvn -pl admin-server -am clean package -DskipTests
+RUN mvn -f admin-server/pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app

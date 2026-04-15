@@ -7,6 +7,7 @@ import com.app.authenticationservice.exception.AuthException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
@@ -15,8 +16,9 @@ public class UserServiceClient {
 
     private final RestClient restClient;
 
-    public UserServiceClient(@Value("${services.user-service.base-url}") String userServiceBaseUrl) {
-        this.restClient = RestClient.builder()
+    public UserServiceClient(RestClient.Builder restClientBuilder,
+                             @Value("${services.user-service.base-url}") String userServiceBaseUrl) {
+        this.restClient = restClientBuilder
                 .baseUrl(userServiceBaseUrl)
                 .build();
     }
@@ -29,6 +31,8 @@ public class UserServiceClient {
                     .retrieve()
                     .body(UserRecordResponse.class);
         } catch (RestClientResponseException ex) {
+            throw mapException(ex);
+        } catch (ResourceAccessException ex) {
             throw mapException(ex);
         }
     }
@@ -43,6 +47,8 @@ public class UserServiceClient {
                     .body(UserRecordResponse.class);
         } catch (RestClientResponseException ex) {
             throw mapException(ex);
+        } catch (ResourceAccessException ex) {
+            throw mapException(ex);
         }
     }
 
@@ -54,6 +60,8 @@ public class UserServiceClient {
                     .retrieve()
                     .body(UserRecordResponse.class);
         } catch (RestClientResponseException ex) {
+            throw mapException(ex);
+        } catch (ResourceAccessException ex) {
             throw mapException(ex);
         }
     }
@@ -69,5 +77,9 @@ public class UserServiceClient {
             return new AuthException("Invalid email or password");
         }
         return new AuthException("User service call failed: " + ex.getStatusText());
+    }
+
+    private RuntimeException mapException(ResourceAccessException ex) {
+        return new AuthException("User service is currently unavailable. Please try again in a moment.");
     }
 }

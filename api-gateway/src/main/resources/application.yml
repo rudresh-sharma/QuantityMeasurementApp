@@ -7,19 +7,19 @@ spring:
         webmvc:
           routes:
             - id: authentication-service-auth
-              uri: lb://authentication-service
+              uri: ${AUTHENTICATION_SERVICE_URL:lb://authentication-service}
               predicates:
                 - Path=/api/v1/auth/**
             - id: authentication-service-oauth
-              uri: lb://authentication-service
+              uri: ${AUTHENTICATION_SERVICE_URL:lb://authentication-service}
               predicates:
                 - Path=/oauth2/**
             - id: authentication-service-login-oauth
-              uri: lb://authentication-service
+              uri: ${AUTHENTICATION_SERVICE_URL:lb://authentication-service}
               predicates:
                 - Path=/login/oauth2/**
             - id: authentication-service-success
-              uri: lb://authentication-service
+              uri: ${AUTHENTICATION_SERVICE_URL:lb://authentication-service}
               predicates:
                 - Path=/oauth-success
             - id: quantity-measurement-service

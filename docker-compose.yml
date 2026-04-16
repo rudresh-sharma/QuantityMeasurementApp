@@ -108,6 +108,9 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://eureka-server:8761/eureka/}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:4200}
+      USER_SERVICE_URL: ${USER_SERVICE_URL:-lb://user-service}
+      QUANTITY_MEASUREMENT_SERVICE_URL: ${QUANTITY_MEASUREMENT_SERVICE_URL:-lb://quantity-measurement-service}
+      AUTHENTICATION_SERVICE_URL: ${AUTHENTICATION_SERVICE_URL:-lb://authentication-service}
     ports:
       - "8080:8080"
 

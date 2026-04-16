@@ -72,6 +72,9 @@ For the current Render frontend deployment, use:
 - `FRONTEND_ORIGIN=https://quantitymeasurementapp-frontend-ysu8.onrender.com`
 - `FRONTEND_GOOGLE_REDIRECT=https://quantitymeasurementapp-frontend-ysu8.onrender.com/oauth-success`
 - `GOOGLE_OAUTH_CALLBACK_URI=https://api-gateway-slc7.onrender.com/login/oauth2/code/google`
+- `AUTHENTICATION_SERVICE_URL=https://<your-auth-service>.onrender.com`
+- `USER_SERVICE_URL=https://user-service-pr3e.onrender.com`
+- `QUANTITY_MEASUREMENT_SERVICE_URL=https://quantity-measurement-service.onrender.com`
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from Google Cloud
 - `AUTH_JWT_SECRET` with a long random value
 - `SPRING_DATASOURCE_PASSWORD` / `MYSQL_ROOT_PASSWORD` with your own database password

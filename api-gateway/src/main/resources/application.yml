@@ -23,11 +23,11 @@ spring:
               predicates:
                 - Path=/oauth-success
             - id: quantity-measurement-service
-              uri: lb://quantity-measurement-service
+              uri: ${QUANTITY_MEASUREMENT_SERVICE_URL:lb://quantity-measurement-service}
               predicates:
                 - Path=/api/v1/quantities/**
             - id: user-service
-              uri: lb://user-service
+              uri: ${USER_SERVICE_URL:lb://user-service}
               predicates:
                 - Path=/api/v1/users/**
 

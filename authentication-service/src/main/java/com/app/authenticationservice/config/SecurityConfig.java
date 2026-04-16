@@ -26,13 +26,8 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration(proxyBeanMethods = false)
@@ -41,18 +36,12 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final boolean googleOauthEnabled;
-    private final List<String> frontendOrigins;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
                           AppUserDetailsService userDetailsService,
-                          @Value("${app.cors.allowed-origin:http://localhost:4200}") String frontendOrigins,
                           @Value("${spring.security.oauth2.client.registration.google.client-id:}") String googleClientId,
                           @Value("${spring.security.oauth2.client.registration.google.client-secret:}") String googleClientSecret) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.frontendOrigins = Arrays.stream(frontendOrigins.split(","))
-                .map(String::trim)
-                .filter(StringUtils::hasText)
-                .toList();
         this.googleOauthEnabled = StringUtils.hasText(googleClientId) && StringUtils.hasText(googleClientSecret);
     }
 
@@ -65,7 +54,6 @@ public class SecurityConfig {
                                                    AuthenticationProvider authenticationProvider) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(
                         googleOauthEnabled ? SessionCreationPolicy.IF_REQUIRED : SessionCreationPolicy.STATELESS
                 ))
@@ -101,20 +89,6 @@ public class SecurityConfig {
         }
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(frontendOrigins);
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Authorization"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
     @Bean

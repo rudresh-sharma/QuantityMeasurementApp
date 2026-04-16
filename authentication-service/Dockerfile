@@ -12,7 +12,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 COPY --from=builder /build/authentication-service/target/*SNAPSHOT.jar app.jar
-COPY authentication-service/secrets /app/secrets
+COPY --from=builder /build/authentication-service/secrets /app/secrets
 
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

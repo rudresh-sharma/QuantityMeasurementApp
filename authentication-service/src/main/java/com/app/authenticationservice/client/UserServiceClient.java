@@ -5,6 +5,7 @@ import com.app.authenticationservice.client.dto.GoogleUserSyncRequest;
 import com.app.authenticationservice.client.dto.UserRecordResponse;
 import com.app.authenticationservice.exception.AuthException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -16,7 +17,7 @@ public class UserServiceClient {
 
     private final RestClient restClient;
 
-    public UserServiceClient(RestClient.Builder restClientBuilder,
+    public UserServiceClient(@Qualifier("loadBalancedRestClientBuilder") RestClient.Builder restClientBuilder,
                              @Value("${services.user-service.base-url}") String userServiceBaseUrl) {
         this.restClient = restClientBuilder
                 .baseUrl(userServiceBaseUrl)

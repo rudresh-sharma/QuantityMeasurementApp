@@ -1,6 +1,7 @@
 package com.app.authenticationservice.config;
 
 import com.app.authenticationservice.security.AppUserDetailsService;
+import com.app.authenticationservice.security.CookieOAuth2AuthorizationRequestRepository;
 import com.app.authenticationservice.security.GoogleOAuth2FailureHandler;
 import com.app.authenticationservice.security.GoogleOAuth2SuccessHandler;
 import com.app.authenticationservice.security.JwtAuthenticationFilter;
@@ -58,6 +59,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider,
+                                                   CookieOAuth2AuthorizationRequestRepository authorizationRequestRepository,
                                                    ObjectProvider<GoogleOAuth2SuccessHandler> googleHandlerProvider,
                                                    ObjectProvider<GoogleOAuth2FailureHandler> googleFailureHandlerProvider,
                                                    AuthenticationProvider authenticationProvider) throws Exception {
@@ -89,9 +91,10 @@ public class SecurityConfig {
             if (handler != null && failureHandler != null && clientRegistrationRepository != null) {
                 http.oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint ->
-                                endpoint.authorizationRequestResolver(
-                                        googleAuthorizationRequestResolver(clientRegistrationRepository)
-                                ))
+                                endpoint.authorizationRequestRepository(authorizationRequestRepository)
+                                        .authorizationRequestResolver(
+                                                googleAuthorizationRequestResolver(clientRegistrationRepository)
+                                        ))
                         .successHandler(handler)
                         .failureHandler(failureHandler));
             }

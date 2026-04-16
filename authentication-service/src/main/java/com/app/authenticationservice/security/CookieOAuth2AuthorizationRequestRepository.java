@@ -6,28 +6,44 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.SerializationUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Base64;
+import java.time.Instant;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CookieOAuth2AuthorizationRequestRepository
         implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
-    private static final String COOKIE_NAME = "OAUTH2_AUTH_REQUEST";
+    private static final String COOKIE_NAME = "OAUTH2_AUTH_STATE";
     private static final int COOKIE_MAX_AGE_SECONDS = 180;
+    private final Map<String, StoredAuthorizationRequest> authorizationRequests = new ConcurrentHashMap<>();
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-        Cookie cookie = findCookie(request, COOKIE_NAME);
-        if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
+        cleanupExpiredEntries();
+
+        String state = request.getParameter("state");
+        if (!StringUtils.hasText(state)) {
+            Cookie cookie = findCookie(request, COOKIE_NAME);
+            if (cookie != null && StringUtils.hasText(cookie.getValue())) {
+                state = cookie.getValue();
+            }
+        }
+
+        if (!StringUtils.hasText(state)) {
             return null;
         }
 
-        byte[] bytes = Base64.getUrlDecoder().decode(cookie.getValue());
-        Object object = SerializationUtils.deserialize(bytes);
-        return object instanceof OAuth2AuthorizationRequest authRequest ? authRequest : null;
+        StoredAuthorizationRequest stored = authorizationRequests.get(state);
+        if (stored == null || stored.isExpired()) {
+            authorizationRequests.remove(state);
+            return null;
+        }
+
+        return stored.authorizationRequest();
     }
 
     @Override
@@ -39,10 +55,19 @@ public class CookieOAuth2AuthorizationRequestRepository
             return;
         }
 
-        byte[] bytes = SerializationUtils.serialize(authorizationRequest);
-        String encoded = Base64.getUrlEncoder().encodeToString(bytes);
+        cleanupExpiredEntries();
+        String state = authorizationRequest.getState();
+        if (!StringUtils.hasText(state)) {
+            deleteCookie(response);
+            return;
+        }
 
-        Cookie cookie = new Cookie(COOKIE_NAME, encoded);
+        authorizationRequests.put(state, new StoredAuthorizationRequest(
+                authorizationRequest,
+                Instant.now().plusSeconds(COOKIE_MAX_AGE_SECONDS)
+        ));
+
+        Cookie cookie = new Cookie(COOKIE_NAME, state);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
@@ -54,6 +79,18 @@ public class CookieOAuth2AuthorizationRequestRepository
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
                                                                  HttpServletResponse response) {
         OAuth2AuthorizationRequest authRequest = loadAuthorizationRequest(request);
+        String state = request.getParameter("state");
+        if (!StringUtils.hasText(state)) {
+            Cookie cookie = findCookie(request, COOKIE_NAME);
+            if (cookie != null && StringUtils.hasText(cookie.getValue())) {
+                state = cookie.getValue();
+            }
+        }
+
+        if (StringUtils.hasText(state)) {
+            authorizationRequests.remove(state);
+        }
+
         deleteCookie(response);
         return authRequest;
     }
@@ -80,5 +117,24 @@ public class CookieOAuth2AuthorizationRequestRepository
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+
+    private void cleanupExpiredEntries() {
+        Iterator<Map.Entry<String, StoredAuthorizationRequest>> iterator = authorizationRequests.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, StoredAuthorizationRequest> entry = iterator.next();
+            if (entry.getValue().isExpired()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private record StoredAuthorizationRequest(
+            OAuth2AuthorizationRequest authorizationRequest,
+            Instant expiresAt
+    ) {
+        private boolean isExpired() {
+            return Instant.now().isAfter(expiresAt);
+        }
     }
 }

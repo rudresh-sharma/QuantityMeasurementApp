@@ -67,11 +67,11 @@ The compose stack injects container-friendly `EUREKA_CLIENT_SERVICEURL_DEFAULTZO
 inside Docker.
 
 Copy `.env.example` to `.env` before a real deployment and fill in your own values.
-For the current Vercel + AWS setup, use:
+For the current Render frontend deployment, use:
 
-- `FRONTEND_ORIGIN=https://quantitymeasurement.vercel.app`
-- `FRONTEND_GOOGLE_REDIRECT=https://quantitymeasurement.vercel.app/oauth-success`
-- `GOOGLE_OAUTH_CALLBACK_URI=http://15.207.1.116:8080/login/oauth2/code/google`
+- `FRONTEND_ORIGIN=https://quantitymeasurementapp-frontend-ysu8.onrender.com`
+- `FRONTEND_GOOGLE_REDIRECT=https://quantitymeasurementapp-frontend-ysu8.onrender.com/oauth-success`
+- `GOOGLE_OAUTH_CALLBACK_URI=https://api-gateway-slc7.onrender.com/login/oauth2/code/google`
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from Google Cloud
 - `AUTH_JWT_SECRET` with a long random value
 - `SPRING_DATASOURCE_PASSWORD` / `MYSQL_ROOT_PASSWORD` with your own database password

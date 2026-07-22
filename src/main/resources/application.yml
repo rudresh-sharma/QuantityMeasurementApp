@@ -1,14 +1,15 @@
 spring:
   application:
     name: quantity-measurement-app
+
   config:
     import: optional:file:./secrets/oauth-secrets.properties
 
   datasource:
-    url: jdbc:mysql://localhost:3306/quantitymeasurementdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/quantitymeasurementdb?sslMode=VERIFY_IDENTITY
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME:root}
-    password: Rudresh@2005
+    username: 2PtXTXe3HdVNSok.root
+    password: UelmCpH2g2FOauxK
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2

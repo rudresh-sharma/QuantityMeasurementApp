@@ -59,7 +59,6 @@ auth:
 app:
   cors:
     allowed-origin: ${FRONTEND_ORIGIN:http://localhost:4200}
-	
-server:
-    port: ${PORT:8080}
 
+server:
+  port: ${PORT:8080}

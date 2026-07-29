@@ -67,3 +67,13 @@ Thumbs.db
 
 ### Local OAuth secrets ###
 /secrets/
+
+
+
+### Environment files ###
+.env
+.env.*
+*.env
+
+### Local config with placeholder secrets ###
+application-local.yml
